@@ -1,6 +1,6 @@
 # Plan: small-context models - compact early and hand off to a subagent
 
-Status: proposed (2026-10-12). Nothing here is built.
+Status: phases 1 and 2 built (2026-10-12); phase 3 not built - run a real small-model session first.
 
 ## Problem
 A model with a small context window (for example 23k) fills up during one long turn, because tool output piles up.

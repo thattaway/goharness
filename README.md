@@ -57,6 +57,9 @@ Run `goharness -h` or `goharness web -h` for the full, current list.
 - `TAVILY_API_KEY` - enables the web-search tool
 - `SCRAPLING_PYTHON` - overrides the Python interpreter used by the page-fetch tool
 - `GOHARNESS_PARALLEL` - how many `spawn_agent` subagents from one turn may run at the same time (default 2, at most 4; 1 turns parallel runs off)
+- `GOHARNESS_COMPACT_AT` - before a turn starts, compact earlier turns into a summary once the history passes this percent of the prompt budget (default 60, 0 = off)
+- `GOHARNESS_COMPACT_MODEL` - model that writes those summaries (default: the session's own model; small models write weak summaries)
+- `GOHARNESS_HANDOFF_AT` - inside a turn, once the history passes this percent of the prompt budget, tell the model once to hand the unfinished work to a `spawn_agent` subagent (default 65, 0 = off)
 - `GOHARNESS_RTK` - set to `off` (or `0`, `false`, `no`) to stop the bash tool running commands through [rtk](https://github.com/rtk-ai/rtk) (see below)
 - `GOHARNESS_HOST_NAMES` - friendly names for hosts in the status bar, as `ip-or-host=name` pairs separated by commas
 - `GOHARNESS_STT_URL` / `GOHARNESS_STT_TOKEN` - base URL (and optional bearer token) of a speech-to-text server with an OpenAI-style `/v1/audio/transcriptions` endpoint; turns on the microphone button in the web UI (see Dictation)

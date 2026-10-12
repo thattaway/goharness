@@ -70,7 +70,7 @@ func (s *Session) Compact(ctx context.Context) (CompactResult, error) {
 	}()
 
 	baseURL, apiKey, _ := s.resolveProvider(st.Provider)
-	result, err := streamChat(ctx, baseURL, apiKey, st.Model, []Message{
+	result, err := streamChat(ctx, baseURL, apiKey, compactModelFor(st), []Message{
 		{Role: "system", Content: strPtr(compactSystemPrompt)},
 		{Role: "user", Content: strPtr("Conversation to summarize:\n\n" + compactTranscript(msgs[1:current]))},
 	}, nil, streamHooks{})

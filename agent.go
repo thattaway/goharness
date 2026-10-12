@@ -592,6 +592,8 @@ func (s *Session) Run(ctx context.Context, userText string, images []string, sin
 		return err
 	}
 
+	s.autoCompact(ctx, sink)
+
 	s.mu.Lock()
 	if s.running { // could have started while the capability check ran
 		s.mu.Unlock()
@@ -756,7 +758,7 @@ func (s *Session) Changes(turn int) ([]FileChange, error) {
 }
 
 func (s *Session) loop(ctx context.Context, sink func(Event), approve Approver) error {
-	trimNoted := false
+	trimNoted, handoffNoted := false, false
 	for {
 		s.mu.Lock()
 		st, msgs, path := s.settings, append([]Message(nil), s.messages...), s.path
@@ -768,6 +770,11 @@ func (s *Session) loop(ctx context.Context, sink func(Event), approve Approver) 
 
 		baseURL, apiKey, _ := s.resolveProvider(st.Provider)
 		budget := promptBudget(modelContextTokens(baseURL, apiKey, st.Model))
+		if !handoffNoted && !s.sub && offersTool(tools, spawnAgentTool) && s.maybeHandoffNudge(msgs, budget) {
+			handoffNoted = true
+			msgs = s.Messages()
+			sink(Event{Type: EvNotice, Text: "context is nearly full: asking the model to hand off to a subagent"})
+		}
 		if trimmed, cut := trimHistory(msgs, budget); cut {
 			msgs = trimmed
 			if !trimNoted {
