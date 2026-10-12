@@ -1,0 +1,15 @@
+goharness
+goharness.pre-*
+__pycache__/
+*.pyc
+
+# Factory job state - never committed
+factory/jobs/
+sandbox/state/
+sandbox/ctx/
+sandbox/*.tar.gz
+node_modules/
+.vitest/
+*.tsbuildinfo
+*.bak*
+*.pre-*
